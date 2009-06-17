@@ -1,0 +1,41 @@
+#!./lua
+
+package.path = package.path..";?;?.lua;lib/?;lib/?.lua;"
+package.cpath = package.cpath..";lib/?.so;"
+
+require "lfs"
+local f = require("datafilter")
+
+-- preprocess on the input and output filename
+local indir = "../" .. (arg[1] or "record_result")
+local outdir = "../" .. (arg[2] or "formatted_result")
+
+if not lfs.attributes( indir, "mode") then
+	print("Can't find input directory: "..indir)
+	return 1
+end 
+if not lfs.attributes( outdir, "mode") then
+	print("Can't find output directory: "..outdir..", I will create it automatically.")
+	lfs.mkdir(outdir)
+end 
+
+print("============== START ===============")
+local count = 0
+for file in lfs.dir(indir) do
+	if file == '.' or file == ".." then continue end
+
+	local inputfile = file
+	local outputfile = "output_"..inputfile
+
+	inputfile = indir.."/"..inputfile
+	outputfile = outdir.."/"..outputfile
+	-- print(inputfile, outputfile)	
+	
+	f.run( inputfile, outputfile )	
+	
+	count = count + 1
+	print("file "..count..": "..inputfile.." finish.")	
+
+end
+
+print("============== END ===============")

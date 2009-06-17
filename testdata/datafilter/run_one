@@ -1,0 +1,18 @@
+#!./lua
+
+package.path = package.path..";?;?.lua;lib/?;lib/?.lua;"
+package.cpath = package.cpath..";lib/?.so;"
+
+-- preprocess on the input and output filename
+local indir = "record_result"
+local outdir = "formatted_result"
+
+local inputfile = arg[1] or "top_result.txt"
+local outputfile = arg[2] or "output_file.txt"
+
+inputfile = "../"..indir.."/"..inputfile
+outputfile = "../"..outdir.."/"..outputfile
+
+local f = require("datafilter")
+
+f.run( inputfile, outputfile )

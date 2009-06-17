@@ -1,0 +1,10 @@
+Datafilter ChangeLogs
+Tang Gang
+tangg@lemote.com
+======================================================================
+
+v0.4 changes (2009-3-25 10:00)
+	1. fix a static directory string in run_batch.
+
+v0.3 changes (2009-3-13 9:31)
+	1. Add batch mode.

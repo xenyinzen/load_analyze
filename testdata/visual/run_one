@@ -1,0 +1,31 @@
+#!./lua
+
+package.path = package.path..";?;?.lua;lib/?;lib/?.lua;"
+package.cpath = package.cpath..";lib/?.so;"
+
+function print_usage()
+	print("|")
+	print("|\t Usage:")
+	print("|\t./run_one input_file output_file")
+	print("|")
+
+end
+
+if not arg[1] then
+	print("Less argument.")
+	print_usage()
+	return -1
+end
+
+-- preprocess on the input and output filename
+local infile = arg[1]
+local outfile = arg[2] or "output.png"
+
+infile = infile:gsub(' ', "\\ ")
+infile = infile:gsub('%(', "\\(")
+infile = infile:gsub('%)', "\\)")
+
+-- e = infile:find(".txt", 1, true)
+-- local outfile = infile:sub(1, e - 1)..".png"
+
+os.execute("./do_chart "..infile.." > "..outfile)

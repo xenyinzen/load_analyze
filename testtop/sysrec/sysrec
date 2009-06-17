@@ -1,0 +1,84 @@
+#!./lua
+
+-------------------------------
+-- current version
+local version = "0.3"
+-- default record result directory
+local dir = "record_result"
+-- default file to save
+local savefile = arg[1] or "top_result.txt"
+-- default time interval is 1s
+local interval = arg[2] or 1
+-------------------------------
+-- default record time is 10s, buf if arg[2] is nil, 
+-- we will record until press end key
+local times = arg[3]
+
+function print_usage()
+	print("|  The usage of sysrec is:")
+	print("|")
+	print("|\t./sysrec [filename.txt] [interval] [times]")
+	print("|")
+
+end
+
+-------------------------------
+-- filter
+if arg[1] and arg[1] == "-h" then
+	print_usage()
+	return 0
+end
+if arg[1] and arg[1]:match("%-") then
+	print("|  Wrong parameters: filename.txt can't contain the char '-'!")
+	print_usage()
+	return 0
+end
+if arg[2] and not tonumber(arg[2]) then
+	print("| Wrong parameters: interval should be a number!")
+	print_usage()
+	return 0
+end
+
+if arg[3] and not tonumber(arg[3]) then
+	print("| Wrong parameters: times should be a number!")
+	print_usage()
+	return 0
+end
+
+--------------------------------
+-- preprocesses on filename and directory
+savefile = "../"..dir.."/"..savefile
+
+---------------------------------------------------
+local topstr = "top -d "..interval.." -b "
+if tonumber(times) then topstr = topstr.."-n "..tonumber(times) end
+
+print("============================================================")
+print("|                                                          |")
+print("|          System Information Recorder - v"..version.."              |")
+print("|                                                          |")
+print("============================================================")
+print("")
+print("The record file is:  ", savefile)
+print("Please press Enter to start....")
+while true do
+        local char = io.read(1)
+        if char == '\n' then break end
+end
+print("=============START===============")
+
+local cmd = topstr.." > "..savefile.." &" 
+
+print("Now recording...")
+
+os.execute(cmd)
+        
+print("Please press Enter to stop....")
+while true do
+        local char = io.read(1)
+        if char == '\n' then break end
+end
+
+os.execute("killall top")
+print("=============END===============")
+return 0

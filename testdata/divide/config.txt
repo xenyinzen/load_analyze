@@ -1,0 +1,12 @@
+------------------------------------------------
+-- here add the item wanted to generate chart --
+------------------------------------------------
+
+wanted = {
+	"CPU Idle(%)",
+	"Mem Occ(k)",
+	"fbi",
+	"joe",
+	"vim",
+	"top",
+}

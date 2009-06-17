@@ -1,0 +1,38 @@
+#!./lua
+
+package.path = package.path..";?;?.lua;lib/?;lib/?.lua;"
+package.cpath = package.cpath..";lib/?.so;"
+
+require "lfs"
+local f = require("divide")
+
+-- preprocess on the input and output filename
+local indir = "../" .. (arg[1] or "formatted_result")
+local outdir ="../" .. (arg[2] or "tmpfiles")
+
+if not lfs.attributes( indir, "mode") then
+	print("Can't find input directory: "..indir)
+	return 1
+end 
+if not lfs.attributes( outdir, "mode") then
+	print("Can't find output directory: "..outdir..", I will create it automatically.")
+	lfs.mkdir(outdir)
+end 
+
+print("============== START ===============")
+local count = 0
+for filename in lfs.dir( indir ) do
+	if filename == '.' or filename == ".." then continue end
+	
+	filename = filename:gsub(' ', "\\ ")
+	filename = filename:gsub('%(', "\\(")
+	filename = filename:gsub('%)', "\\)")
+	
+	f.run( filename, indir, outdir )	
+	
+	count = count + 1
+	print("file "..count..": "..filename.." finish.")	
+
+end
+
+print("============== END ===============")
